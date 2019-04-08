@@ -35,8 +35,3 @@ class Ground_Truth:
             return 30
         else:
             return -1
-
-if __name__ == '__main__':
-
-    search = 'chengxiang zhai site:illinois.edu'
-    g = Ground_Truth(search, 200)
