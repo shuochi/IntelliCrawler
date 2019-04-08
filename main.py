@@ -25,8 +25,8 @@ def main():
     args = parser.parse_args()
 
     key_word = 'chengxiang zhai site:illinois.edu'
-    g = Ground_Truth(key_word, 200)
-    # Focused_Crawler = Focused_Crawler_Reinforcement_Learning(g.url_set())
+    ground_truth = Ground_Truth(key_word, 200)
+    # Focused_Crawler = Focused_Crawler_Reinforcement_Learning(ground_truth)
     # Focused_Crawler.train(args)
 
 if __name__ == '__main__':

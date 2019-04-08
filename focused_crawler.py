@@ -4,17 +4,19 @@ from web_processer import Web_Processer
 
 class Focused_Crawler_Reinforcement_Learning:
 
-    def __init__(self, url_set):
-        self.url_set = url_set
+    def __init__(self, ground_truth):
+        self.ground_truth = ground_truth
         pass
 
     def page_state(self):
         page_target_topic = self.processer.page_target_topic()
         page_categories = self.processer.page_categories()
+        pass
 
     def outlink_actions(self, actions_index):
         outlink_target_topic = self.processer.outlink_target_topic(actions_index)
         outlink_categories = self.processer.outlink_categories(actions_index)
+        pass
 
     def B_enqueue(self, outlinks, state, actions, Q):
         pass
@@ -43,11 +45,12 @@ class Focused_Crawler_Reinforcement_Learning:
                 l_s_a = select_random()
             else:
                 l_s_a = select_max_Q()
-            if l_s_a[0] in self.visited:
+            link = l_s_a[0]
+            if link in self.visited:
                 continue
 
-            self.processer.crawl_website(l_s_a[0])
-            reward = self.processer.reward()
+            reward = self.ground_truth.reward(link)
+            self.processer.crawl_website(link)
             state = self.page_state()
             outlinks = self.processer.outlinks()
             actions_index = actions_index(outlinks)

@@ -7,6 +7,8 @@ class Ground_Truth:
         self.num = num
         self.bing_result()
         self.illinois_result()
+        self.result = set()
+        self.result.update(self.bing_url)
 
     def bing_result(self):
         exist = 1
@@ -28,10 +30,11 @@ class Ground_Truth:
     def illinois_result(self):
         pass
 
-    def url_set(self):
-        self.result = set()
-        self.result.update(self.bing_url)
-        return self.result
+    def reward(self, link):
+        if link in self.result:
+            return 30
+        else:
+            return -1
 
 if __name__ == '__main__':
 
