@@ -4,7 +4,7 @@ from msrest.authentication import CognitiveServicesCredentials
 
 class Bing_Search:
     def __init__(self):
-        subscription_key = "303c93e3970f4bfca81f44a53f5c58f5"
+        subscription_key = "fea767db97b44733bc86bfe710f80be6"
         self.client = WebSearchAPI(CognitiveServicesCredentials(subscription_key))
 
     def search(self, key_word, num):
@@ -30,7 +30,7 @@ class Bing_Search:
 
 if __name__ == '__main__':
 
-    subscription_key = "303c93e3970f4bfca81f44a53f5c58f5"
+    subscription_key = "fea767db97b44733bc86bfe710f80be6"
     client = WebSearchAPI(CognitiveServicesCredentials(subscription_key))
     search = 'chengxiang zhai site:illinois.edu'
     web_data = client.web.search(query=search, response_filter=['Webpages'], \
