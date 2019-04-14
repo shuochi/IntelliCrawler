@@ -30,8 +30,8 @@ class Ground_Truth:
     def illinois_result(self):
         pass
 
+    def is_relevant(self, link):
+        return True if link in self.result else False
+
     def reward(self, link):
-        if link in self.result:
-            return 30
-        else:
-            return -1
+        return 30 if self.is_relevant(link) else -1

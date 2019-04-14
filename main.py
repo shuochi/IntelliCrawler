@@ -10,14 +10,18 @@ def main():
                         domains for crawling')
     parser.add_argument('--limit_pages', default=1000, help='the maximum \
                         websites to visit')
-    parser.add_argument('--topics', default=['chengxiang zhai'], help='target \
-                        topics')
+    parser.add_argument('--topic', default='chengxiang zhai', help='target \
+                        topic')
     parser.add_argument('--categories', default=[], help='related categories \
                         with topics, get from Open Directory Project')
     # Q learning parameters
-    parser.add_argument('--epsilon', default=0.2, help='epsilon-greedy policy')
-    parser.add_argument('--alpha', default=0.2, help='learning rate')
-    parser.add_argument('--gamma', default=0.2, help='discount rate')
+    parser.add_argument('--epsilon', default=0.1, help='epsilon-greedy policy')
+    parser.add_argument('--alpha', default=0.01, help='learning rate')
+    parser.add_argument('--gamma', default=0.9, help='discount rate')
+    # change of relevance
+    parser.add_argument('--beta', default=0.4, help='relevance change of target topic')
+    parser.add_argument('--sigma1', default=0.1, help='first difference parameter')
+    parser.add_argument('--sigma2', default=0.3, help='second difference parameter')
     # mode
     parser.add_argument('--synchronization', default=0, help='the way to \
                         update the value in queue. mode 0, 1, 2 represent: \
