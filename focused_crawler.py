@@ -3,7 +3,7 @@ import heapq
 import networkx as nx
 import matplotlib.pyplot as plt
 
-from web_processer import Web_Processer
+from web_processor import WebProcessor
 
 class Focused_Crawler_Reinforcement_Learning:
 

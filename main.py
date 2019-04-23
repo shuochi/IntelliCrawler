@@ -10,7 +10,7 @@ def main():
                         domains for crawling')
     parser.add_argument('--limit_pages', default=1000, help='the maximum \
                         websites to visit')
-    parser.add_argument('--topics', default=['chengxiang zhai'], help='target \
+    parser.add_argument('--topics', default=['artificial intelligence'], help='target \
                         topics')
     # Q learning parameters
     parser.add_argument('--epsilon', default=0.1, help='epsilon-greedy policy')
@@ -36,10 +36,8 @@ def main():
                         synchronous, asynchronous, moderated')
 
     args = parser.parse_args()
-    args.seeds = [1]
-    args.limit_pages = 500
-    # key_word = 'artificial intelligence'
-    # ground_truth = Ground_Truth(key_word, 1000)
+    key_word = 'artificial intelligence'
+    ground_truth = Ground_Truth(key_word, 1000)
     Focused_Crawler = Focused_Crawler_Reinforcement_Learning()
     Focused_Crawler.train(args)
     # Focused_Crawler.test(ground_truth)

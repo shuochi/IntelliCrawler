@@ -29,7 +29,7 @@ class WebProcessor:
         if model:
             self.model = model
         else:
-            path = '../Relevance-HTML/model/GoogleNews-vectors-negative300.bin'
+            path = '/mnt/d/Word2Vec/GoogleNews-vectors-negative300.bin'
             if os.path.isfile(path):
                 self.model = gensim.models.KeyedVectors.load_word2vec_format(
                     path, binary=True)
