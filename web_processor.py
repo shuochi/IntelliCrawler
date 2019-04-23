@@ -42,9 +42,6 @@ class WebProcessor:
                     "https://code.google.com/archive/p/word2vec/.")
         self.sim_threshold = sim_threshold
 
-    def get_topic_relevance(self):
-        pass
-
     def crawl_website(self, url):
         self.url = url
         try:
@@ -65,7 +62,7 @@ class WebProcessor:
                 stripped = re.sub(r'\s+', ' ', stripped).strip()
                 if stripped:
                     tag_text[tag] += f' {stripped.lower()}'.strip()
-        return tag_text
+        return dict(tag_text)
 
     def get_hyperlinks(self):
         self.links = {}
@@ -101,75 +98,14 @@ class WebProcessor:
         return tf
 
 
-def train_cnn(filename, query):
-    wp = WebProcessor(query=query)
-    with open(filename) as f:
-        lines = f.read().splitlines()
-    lines = lines[:20]
-    data = list(map(lambda x: (float(x.split()[0]), x.split()[1]), lines))
-    label = np.empty(len(data))
-    features = np.empty([len(data), len(wp.tags)])
-    for idx, (score, url) in enumerate(data):
-        label[idx] = score
-        wp.crawl_website(url=url)
-        tag_text = wp.extract_by_tags()
-        features[idx] = wp.get_tfidf(tag_text).flatten()
-    # print(label)
-    # print(features)
-
-    train_size = int(len(data) * .8)
-    print("Train size: %d" % train_size)
-    print("Test size: %d" % (len(data) - train_size))
-    x_train = features[:train_size]
-    y_train = label[:train_size]
-    x_test = features[train_size:]
-    y_test = label[train_size:]
-
-    epochs = 2
-    batch_size = 32
-
-    model = Sequential()
-    model.add(
-        Dense(
-            12,
-            input_dim=features.shape[1],
-            kernel_initializer='normal',
-            activation='relu'))
-    model.add(Dense(8, activation='relu'))
-    model.add(Dense(1, activation='linear'))
-
-    model.compile(loss='mse', optimizer='adam', metrics=['mse', 'mae'])
-    print(model.summary())
-
-    history = model.fit(
-        x_train,
-        y_train,
-        batch_size=batch_size,
-        epochs=epochs,
-        verbose=1,
-        validation_split=0.1)
-    # score = model.evaluate(x_test, y_test, batch_size=batch_size, verbose=1)
-    plt.plot(history.history['loss'])
-    plt.plot(history.history['val_loss'])
-    plt.title('model loss')
-    plt.ylabel('loss')
-    plt.xlabel('epoch')
-    plt.legend(['train', 'validation'], loc='upper left')
-    plt.show()
-
-    # features = features.flatten()
-
-
 def main():
     wp = WebProcessor(query=['education', 'university', 'college'])
     wp.crawl_website(url='https://illinois.edu/')
-    # links = wp.get_hyperlinks()
+    links = wp.get_hyperlinks()
     tag_text = wp.extract_by_tags()
     tf = wp.get_tfidf(tag_text)
     print(tf)
 
 
 if __name__ == '__main__':
-    # main()
-    train_cnn('artificial-intelligence.txt',
-              ['education', 'university', 'college'])
+    main()
