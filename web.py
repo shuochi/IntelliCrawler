@@ -10,7 +10,7 @@ class Web:
         self.query = re.split(' |,', topics)
         self.processor = WebProcessor(self.query)
         self.page_eval = RelPredictor(self.query, self.processor)
-        self.outlink_eval = link_evaluation(self.query, self.processor)
+        self.outlink_eval = LinkEvaluation(self.query, self.processor)
 
     def page_target_topics(self, link):
         score = self.page_eval.get_relevance(link)
