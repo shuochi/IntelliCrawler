@@ -6,9 +6,8 @@ import torch.optim as optim
 from torch.utils.data import DataLoader
 import nltk
 from nltk.corpus import wordnet
-import gensim
-
 from web_processor import WebProcessor
+import gensim
 
 # Build CNN
 class CNN(nn.Module):
@@ -32,7 +31,6 @@ class LinkEvaluation:
     def __init__(self, topic_list, processor):
         self.topic_list = topic_list
         self.processor = processor
-        self.net = CNN()
         self.net = torch.load('url_relevance.pth')
 
     def get_feature(self, links, topic, relevant_urls):
@@ -132,3 +130,6 @@ class LinkEvaluation:
             index += 1
 
         return res
+
+if __name__ == '__main__':
+    L = LinkEvaluation('sdf', 'sdf')

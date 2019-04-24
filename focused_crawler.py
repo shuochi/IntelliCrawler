@@ -7,28 +7,29 @@ import matplotlib.pyplot as plt
 from web import Web
 
 class Focused_Crawler_Reinforcement_Learning:
-    def __init__(self, args):
-        self.args = args
-        self.processer = Web(self.args.topics)
+    def __init__(self, topics):
+        self.processer = Web(topics)
 
-    def train(self):
-        self.w = np.zeros(5*(5+3))
+    def train(self, args):
+        self.args = args
+        self.w = np.ones(5*(5+3)) * 0.01
         self.B = []
         self.visited = set()
         self.relevant = []
         self.DG = nx.DiGraph()
-        visited_pages = 0
+        self.visited_pages = 0
 
         for link in self.args.seeds:
             _, state = self.page_state(link, None) # 5 relevance
             # list_outlinks (unvisited), 1 list_relevance + 2 relevance
             outlinks, action = self.outlink_action(link)
             sas = self.encode(state, action) # list_code (8 digits)
+            Q_list = self.decode(sas) @ self.w
             for i in range(len(outlinks)):
-                heapq.heappush(self.B, [0, link, outlinks[i], sas[i]])
+                heapq.heappush(self.B, [-Q_list[i], link, outlinks[i], sas[i]])
             self.log(link, None, outlinks, None)
 
-        while visited_pages < self.args.limit_pages:
+        while self.visited_pages < self.args.limit_pages:
             if not len(self.B):
                 break
             if np.random.rand() < self.args.epsilon:
@@ -75,11 +76,11 @@ class Focused_Crawler_Reinforcement_Learning:
                 heapq.heappush(self.B, [-Q_list[i], link, outlinks[i], sas[i]])
 
             self.log(link, parent_link, outlinks, reward)
-            visited_pages += 1
+            self.visited_pages += 1
 
         print('Final w:', self.w)
         f = plt.figure()
-        nx.draw_circular(self.DG, with_labels=True, ax=f.add_subplot(111))
+        nx.draw_circular(self.DG, with_labels=False, ax=f.add_subplot(111))
         f.savefig('graph.png')
 
     def test(self, ground_truth):
@@ -216,6 +217,10 @@ class Focused_Crawler_Reinforcement_Learning:
         return q
 
     def log(self, link, parent_link, outlinks, reward):
+        if not parent_link:
+            print('No.', -1)
+        else:
+            print('No.', self.visited_pages)
         print('link:', link)
         if not parent_link:
             print('parent_link: NULL')
@@ -224,12 +229,14 @@ class Focused_Crawler_Reinforcement_Learning:
         if not outlinks:
             print('outlinks: NULL')
         else:
-            print('outlinks:', outlinks)
+            # print('outlinks:', outlinks)
+            print('outlinks:', len(outlinks))
         if not reward:
             print('reward: NULL')
         else:
             print('reward:', reward)
-        print('DG:', self.DG.nodes.data())
-        print('B:', self.B)
-        input('-'*80)
-        # print('-'*80)
+        # print('DG:', self.DG.nodes.data())
+        # print('B:', self.B)
+        print('B:', len(self.B))
+        # input('-'*80)
+        print('-'*80)
