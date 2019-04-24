@@ -1,11 +1,10 @@
 import numpy as np
 
-class Web_Processer:
-
+class FakeWeb:
     def __init__(self, topics):
         self.topics = topics
-        # self.fake_data_1()
-        self.fake_data_2()
+        self.fake_data_1()
+        # self.fake_data_2()
 
     def fake_data_1(self):
         self.links = list(range(1, 12))
@@ -26,12 +25,8 @@ class Web_Processer:
             else:
                 self.outlinks[i[0]].append(i[1])
 
-    def crawl_website(self, link):
+    def page_target_topics(self, link):
         self.link = link
-        # use self.link
-        # get self.page
-
-    def page_target_topics(self):
         # use self.page, self.topics
         # get relevance
         relevance = np.random.rand()
@@ -47,5 +42,5 @@ class Web_Processer:
         return dict_of_relevance # dict = {outlink: relevance}
 
 if __name__ == '__main__':
-    w = Web_Processer('dd')
+    w = Web_Processer('1')
     print(w.outlinks)

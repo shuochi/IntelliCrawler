@@ -6,11 +6,11 @@ from ground_truth import Ground_Truth
 def main():
     parser = argparse.ArgumentParser(description='Focused Crawler')
     # input
-    parser.add_argument('--seeds', default=['illinois.edu'], help='the start \
+    parser.add_argument('--seeds', default=['https://cs.illinois.edu/'], help='the start \
                         domains for crawling')
-    parser.add_argument('--limit_pages', default=1000, help='the maximum \
+    parser.add_argument('--limit_pages', default=30, help='the maximum \
                         websites to visit')
-    parser.add_argument('--topics', default=['artificial intelligence'], help='target \
+    parser.add_argument('--topics', default='artificial intelligence', help='target \
                         topics')
     # Q learning parameters
     parser.add_argument('--epsilon', default=0.1, help='epsilon-greedy policy')
@@ -35,11 +35,11 @@ def main():
                         update the value in queue. mode 0, 1, 2 represent: \
                         synchronous, asynchronous, moderated')
 
-    args = parser.parse_args()
+    args = parser.parse_args([])
     key_word = 'artificial intelligence'
     ground_truth = Ground_Truth(key_word, 1000)
-    Focused_Crawler = Focused_Crawler_Reinforcement_Learning()
-    Focused_Crawler.train(args)
+    Focused_Crawler = Focused_Crawler_Reinforcement_Learning(args)
+    Focused_Crawler.train()
     # Focused_Crawler.test(ground_truth)
 
 if __name__ == '__main__':

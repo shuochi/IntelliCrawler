@@ -3,23 +3,23 @@ import heapq
 import networkx as nx
 import matplotlib.pyplot as plt
 
-from web_processor import WebProcessor
+# from fake_web import FakeWeb
+from web import Web
 
 class Focused_Crawler_Reinforcement_Learning:
-
-    def __init__(self):
-        pass
-
-    def train(self, args):
+    def __init__(self, args):
         self.args = args
-        self.processer = Web_Processer(args.topics)
+        self.processer = Web(self.args.topics)
+
+    def train(self):
         self.w = np.zeros(5*(5+3))
         self.B = []
-        self.visited = dict()
+        self.visited = set()
+        self.relevant = []
         self.DG = nx.DiGraph()
         visited_pages = 0
 
-        for link in args.seeds:
+        for link in self.args.seeds:
             _, state = self.page_state(link, None) # 5 relevance
             # list_outlinks (unvisited), 1 list_relevance + 2 relevance
             outlinks, action = self.outlink_action(link)
@@ -28,15 +28,15 @@ class Focused_Crawler_Reinforcement_Learning:
                 heapq.heappush(self.B, [0, link, outlinks[i], sas[i]])
             self.log(link, None, outlinks, None)
 
-        while visited_pages < args.limit_pages:
+        while visited_pages < self.args.limit_pages:
             if not len(self.B):
                 break
-            if np.random.rand() < args.epsilon:
+            if np.random.rand() < self.args.epsilon:
                 pair = self.B.pop(np.random.randint(len(self.B)))
             else:
                 pair = heapq.heappop(self.B)
             parent_link, link, sa = pair[1:]
-            if link in self.visited.keys():
+            if link in self.visited:
                 self.DG.add_edge(parent_link, link)
                 self.recursive_update(parent_link, link)
                 print('have visited!')
@@ -50,24 +50,24 @@ class Focused_Crawler_Reinforcement_Learning:
                 Q_list = self.decode(sas) @ self.w
 
             q_this = np.inner(self.decode(sa),self.w)
-            if reward == args.reward_true:
-                self.w += args.alpha*(reward-q_this)*self.decode(sa)
+            if reward == self.args.reward_true:
+                self.w += self.args.alpha*(reward-q_this)*self.decode(sa)
             else:
                 q_next = 0
                 if len(outlinks):
-                    if np.random.rand() < args.epsilon:
+                    if np.random.rand() < self.args.epsilon:
                         sa_next = sas[np.random.randint(len(sas))]
                     else:
                         sa_next = sas[np.argmax(Q_list)]
                     q_next = np.inner(self.decode(sa_next),self.w)
-                if args.synchronization == 2:
-                    self.w += args.alpha*(1-args.gamma)*(reward+args.gamma*\
-                              q_next-q_this)*self.decode(sa)
+                if self.args.synchronization == 2:
+                    self.w += self.args.alpha*(1-self.args.gamma)*(reward+\
+                              self.args.gamma*q_next-q_this)*self.decode(sa)
                 else:
-                    self.w += args.alpha*(reward+args.gamma*q_next-q_this)*\
-                              self.decode(sa)
+                    self.w += self.args.alpha*(reward+self.args.gamma*q_next-\
+                              q_this)*self.decode(sa)
 
-            if args.synchronization == 0:
+            if self.args.synchronization == 0:
                 for pair in self.B:
                     pair[0] = -np.inner(self.decode(pair[3]), self.w)
                 heapq.heapify(self.B)
@@ -86,11 +86,12 @@ class Focused_Crawler_Reinforcement_Learning:
         pass
 
     def page_state(self, link, parent_link):
-        self.processer.crawl_website(link)
-        page_target_topics = self.processer.page_target_topics()
+        page_target_topics = self.processer.page_target_topics(link)
         page_relevant = True if page_target_topics >= self.args.relevant else False
+        if page_relevant:
+            self.relevant.append((link, page_target_topics))
         reward = self.args.reward_true if page_relevant else self.args.reward_false
-        self.visited[link] = page_target_topics
+        self.visited.add(link)
         self.DG.add_node(link, relevant=page_relevant, relevance=\
                          page_target_topics, my=page_target_topics ,max=0)
         page_change, page_all_parents, page_relevant_parents, page_distance = \
@@ -144,11 +145,11 @@ class Focused_Crawler_Reinforcement_Learning:
                 self.recursive_update_child(i, n-1)
 
     def outlink_action(self, link):
-        outlink_action = self.processer.outlink_target_topics(self.visited)
+        outlink_action = self.processer.outlink_target_topics(self.relevant)
         outlinks = []
         outlink_target_topics = []
         for key in outlink_action.keys():
-            if key not in self.visited.keys():
+            if key not in self.visited:
                 outlinks.append(key)
                 outlink_target_topics.append(outlink_action[key])
             else:
@@ -230,5 +231,5 @@ class Focused_Crawler_Reinforcement_Learning:
             print('reward:', reward)
         print('DG:', self.DG.nodes.data())
         print('B:', self.B)
-        # input('-'*80)
-        print('-'*80)
+        input('-'*80)
+        # print('-'*80)

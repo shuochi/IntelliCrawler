@@ -8,12 +8,16 @@ from web_processor import WebProcessor
 
 
 class RelPredictor:
-    def __init__(self, query, model=None):
+    def __init__(self, query, processor=None, model=None):
         self.query = query
         if model:
             self.model = model
         else:
             self.model = load_model('model/default_model.h5')
+        if not processor:
+            self.processor = WebProcessor(query=self.query)
+        else:
+            self.processor = processor
 
     def train_model(self, label, features):
         pass
@@ -21,12 +25,10 @@ class RelPredictor:
     def save_model(self):
         self.model.save('model/default_model.h5')
 
-    def get_relevance(self, url, processor=None):
-        if not processor:
-            processor = WebProcessor(query=self.query)
-        processor.crawl_website(url)
-        tag_text = processor.extract_by_tags()
-        tf = processor.get_tfidf(tag_text)
+    def get_relevance(self, url):
+        self.processor.crawl_website(url)
+        tag_text = self.processor.extract_by_tags()
+        tf = self.processor.get_tfidf(tag_text)
         return self.model.predict(np.array([
             tf,
         ]))[0][0]
