@@ -1,0 +1,140 @@
+html, body {
+  padding: 0;
+  margin: 0;
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+}
+
+.main {
+  display: block;
+}
+
+.logo {
+  display: block;
+  position: absolute;
+  top: 10vw;
+  font-size: 5vw;
+  text-align: center;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #0084FF;
+}
+
+.search {
+  display: block;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 20vw;
+  height: 10vw;
+  width: 40vw;
+}
+
+.title {
+  display: flex;
+  position: absolute;
+  left: 0%;
+  height: 100%;
+  width: 50%;
+  flex-direction: column;
+  font-size: 1.5vw;
+  justify-content: space-around;
+  color: #0084FF;
+}
+
+.input {
+  display: flex;
+  position: absolute;
+  left: 50%;
+  height: 100%;
+  width: 50%;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.button {
+  display: block;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 35vw;
+  font-size: 3vw;
+  color: white;
+  background-color: #D9D9D9;
+  padding: 0.7vw;
+  border-radius: 2vw;
+}
+
+a:hover {
+  color: gray;
+  cursor: pointer;
+}
+
+.result {
+  display: none;
+}
+
+.info_logo {
+  display: block;
+  position: absolute;
+  font-size: 4vw;
+  text-align: center;
+  color: #0084FF;
+  top: 3vh;
+  left: 3vw;
+  height: 12vh;
+}
+
+.info_box {
+  display: block;
+  position: absolute;
+  left: 3vw;
+  top: 15vh;
+  height: 70vh;
+  width: 25vw;;
+  font-size: 1.5vw;
+}
+
+.info_line {
+  display: block;
+  position: relative;
+  height: 10vh;
+  line-height: 10vh;
+}
+
+b {
+  color: #0084FF;
+  margin: 0;
+}
+
+p {
+  color: gray;
+  overflow: auto;
+  margin: 0;
+}
+
+.info_res {
+  display: block;
+  position: absolute;
+  height: 70vh;
+  width: 60vw;
+  top: 15vh;
+  left: 30vw;
+  border: solid 1px #D9D9D9;
+  border-radius: 1vw;
+  overflow: auto;
+}
+
+.info_res1 {
+  display: block;
+  position: absolute;
+  height: 70vh;
+  width: 50vw;
+}
+
+.info_res2 {
+  display: block;
+  position: absolute;
+  height: 70vh;
+  left: 50vw;
+  width: 10vw;
+}

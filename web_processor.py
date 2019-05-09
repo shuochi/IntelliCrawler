@@ -50,7 +50,7 @@ class WebProcessor:
         except Exception:
             return None
         self.soup = BeautifulSoup(r.text, 'html.parser')
-        # print('Web page loaded..')
+        print('Web page loaded..')
 
     def extract_by_tags(self):
         tag_text = defaultdict(str)

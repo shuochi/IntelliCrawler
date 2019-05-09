@@ -7,8 +7,9 @@ import matplotlib.pyplot as plt
 from web import Web
 
 class Focused_Crawler_Reinforcement_Learning:
-    def __init__(self, topics):
-        self.processer = Web(topics)
+    def __init__(self, topics, W2V, collect):
+        self.processer = Web(topics, W2V)
+        self.collect = collect
 
     def train(self, args):
         self.args = args
@@ -93,6 +94,7 @@ class Focused_Crawler_Reinforcement_Learning:
             self.relevant.append((link, page_target_topics))
         reward = self.args.reward_true if page_relevant else self.args.reward_false
         self.visited.add(link)
+        self.collect.append({'url': link, 'score': page_target_topics.item()})
         self.DG.add_node(link, relevant=page_relevant, relevance=\
                          page_target_topics, my=page_target_topics ,max=0)
         page_change, page_all_parents, page_relevant_parents, page_distance = \

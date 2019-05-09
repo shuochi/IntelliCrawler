@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <title>IntelliCrawler</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
+        <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+        <script src="func.js"></script>
+    </head>
+
+    <body>
+
+      <div id = "main" class = "main">
+
+        <a class = "logo" onclick = "go_back_home()">IntelliCrawler</a>
+
+        <div class = "search">
+          <div class= "title">
+            <b>Topic</b>
+            <b>Main Url</b>
+            <b>Page Number Wanted</b>
+          </div>
+          <div class = "input">
+            <input id = "topic" type = "text" value = "artificial intelligence">
+            <input id = "url" type = "text" value = "https://cs.illinois.edu/">
+            <input id = "page" type = "text" value = "10">
+          </div>
+        </div>
+
+        <a class = "button" onclick= "get_result()" >Search</a>
+
+      </div>
+
+      <div id = "result" class = "result">
+
+        <a class = "info_logo" onclick = "go_back_home()">IntelliCrawler</a>
+
+        <div class= "info_box">
+          <b class = "info_line">Topic</b>
+          <p class = "info_line" id = "info_topic"><p>
+          <b class = "info_line">Main Url</b>
+          <p class = "info_line" id = "info_url"><p>
+          <b class = "info_line">Page Number Wanted</b>
+          <p class = "info_line" id = "info_page"><p>
+          <b class = "info_line">The results are showed at right.</b>
+        </div>
+
+        <div class = "info_res" id = "info_res">
+          <div class = "info_res1" id = "info_res1"></div>
+          <div class = "info_res2" id = "info_res2"></div>
+        </div>
+
+      </div>
+
+    </body>
+
+</html>

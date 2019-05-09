@@ -8,6 +8,9 @@ import nltk
 from nltk.corpus import wordnet
 from web_processor import WebProcessor
 import gensim
+import os, sys
+lib_path = os.path.abspath(os.path.join('..'))
+sys.path.append(lib_path)
 
 # Build CNN
 class CNN(nn.Module):
@@ -28,10 +31,13 @@ class CNN(nn.Module):
         return output
 
 class LinkEvaluation:
-    def __init__(self, topic_list, processor):
+    def __init__(self, topic_list, processor, model=None):
         self.topic_list = topic_list
         self.processor = processor
-        self.net = torch.load('url_relevance.pth')
+        if model:
+            self.net = model
+        else:
+            self.net = torch.load('url_relevance.pth')
 
     def get_feature(self, links, topic, relevant_urls):
 
