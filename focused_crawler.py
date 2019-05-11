@@ -37,7 +37,8 @@ class Focused_Crawler_Reinforcement_Learning:
                 pair = self.B.pop(np.random.randint(len(self.B)))
             else:
                 pair = heapq.heappop(self.B)
-            parent_link, link, sa = pair[1:]
+            Q, parent_link, link, sa = pair[:]
+            self.collect.append({'url': link, 'score': Q})
             if link in self.visited:
                 self.DG.add_edge(parent_link, link)
                 self.recursive_update(parent_link, link)
@@ -94,7 +95,6 @@ class Focused_Crawler_Reinforcement_Learning:
             self.relevant.append((link, page_target_topics))
         reward = self.args.reward_true if page_relevant else self.args.reward_false
         self.visited.add(link)
-        self.collect.append({'url': link, 'score': page_target_topics.item()})
         self.DG.add_node(link, relevant=page_relevant, relevance=\
                          page_target_topics, my=page_target_topics ,max=0)
         page_change, page_all_parents, page_relevant_parents, page_distance = \
