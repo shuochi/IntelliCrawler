@@ -2,9 +2,8 @@ import argparse
 
 from focused_crawler import Focused_Crawler_Reinforcement_Learning
 from ground_truth import Ground_Truth
-from link_evaluation import CNN
 
-def main():
+def Main(input_all, W2V, collect):
     parser = argparse.ArgumentParser(description='Focused Crawler')
     # input
     parser.add_argument('--seeds', default=['https://cs.illinois.edu/'], help='the start \
@@ -37,8 +36,12 @@ def main():
                         synchronous, asynchronous, moderated')
 
     args = parser.parse_args([])
-    Focused_Crawler = Focused_Crawler_Reinforcement_Learning(args.topics)
-    # Focused_Crawler.train(args)
+    args.topics = input_all[0]
+    args.seeds = input_all[1]
+    args.limit_pages = input_all[2]
+    Focused_Crawler = Focused_Crawler_Reinforcement_Learning(args.topics, \
+        W2V, collect)
+    Focused_Crawler.train(args)
 
     # key_word = 'artificial intelligence'
     # ground_truth = Ground_Truth(key_word, 1000)

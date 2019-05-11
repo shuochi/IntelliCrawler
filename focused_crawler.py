@@ -7,8 +7,9 @@ import matplotlib.pyplot as plt
 from web import Web
 
 class Focused_Crawler_Reinforcement_Learning:
-    def __init__(self, topics):
-        self.processer = Web(topics)
+    def __init__(self, topics, W2V, collect):
+        self.processer = Web(topics, W2V)
+        self.collect = collect
 
     def train(self, args):
         self.args = args
@@ -36,7 +37,8 @@ class Focused_Crawler_Reinforcement_Learning:
                 pair = self.B.pop(np.random.randint(len(self.B)))
             else:
                 pair = heapq.heappop(self.B)
-            parent_link, link, sa = pair[1:]
+            Q, parent_link, link, sa = pair[:]
+            self.collect.append({'url': link, 'score': Q})
             if link in self.visited:
                 self.DG.add_edge(parent_link, link)
                 self.recursive_update(parent_link, link)

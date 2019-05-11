@@ -1,16 +1,16 @@
 import numpy as np
-import re
+import torch.nn as nn
 
 from web_processor import WebProcessor
 from rel_predictor import RelPredictor
 from link_evaluation import LinkEvaluation
+from link_evaluation import CNN
 
 class Web:
-    def __init__(self, topics):
-        self.query = re.split(' |,', topics)
-        self.processor = WebProcessor(self.query)
-        self.page_eval = RelPredictor(self.query, self.processor)
-        self.outlink_eval = LinkEvaluation(self.query, self.processor)
+    def __init__(self, query, W2V):
+        self.processor = WebProcessor(query, model=W2V)
+        self.page_eval = RelPredictor(query, self.processor)
+        self.outlink_eval = LinkEvaluation(query, self.processor)
 
     def page_target_topics(self, link):
         score = self.page_eval.get_relevance(link)
